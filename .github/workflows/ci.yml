@@ -1,0 +1,48 @@
+name: CI
+
+# Runs on every PR targeting main: opened, synchronize (new commits) and reopened.
+# Also runs on push to main so the default branch always shows its status.
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# Cancel an in-progress run when new commits are pushed to the same PR.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Install, Lint, Test, Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js (from .nvmrc)
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint (ESLint)
+        run: npm run lint
+
+      - name: Test (Jest)
+        run: npm run test
+        env:
+          CI: true
+
+      - name: Build
+        run: npm run build
