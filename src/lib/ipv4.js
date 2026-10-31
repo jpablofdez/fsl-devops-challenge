@@ -134,7 +134,7 @@ class IPv4 {
   }
 
   count() {
-    const count = parseInt((1 << (32 - this.mask)).toString(2), 2);
+    const count = parseInt((1 << (31 - this.mask)).toString(2), 2);
     return count;
   }
 
