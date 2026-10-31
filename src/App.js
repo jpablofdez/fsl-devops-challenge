@@ -1,11 +1,13 @@
 import IPv4Addr from "./IPv4Addr";
 import "./App.css";
 
+const appTitel = "CIDR Calculator";
+
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <div>CIDR Calculator</div>
+        <div>{appTitle}</div>
       </header>
       <IPv4Addr />
       <footer>
